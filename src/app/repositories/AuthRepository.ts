@@ -13,6 +13,11 @@ class AuthRepository {
     return rows;
   }
 
+  async findById(id: string) {
+    const rows = await query('SELECT * FROM users WHERE id = $1', [id]);
+    return rows;
+  }
+
   async create({
     photoUrl,
     email,

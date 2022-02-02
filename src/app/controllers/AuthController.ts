@@ -21,7 +21,6 @@ class AuthController {
     const { email, password } = req.body;
 
     const [userWithThisEmail] = await AuthRepository.findByEmail(email);
-    console.log({ userWithThisEmail });
 
     if (!userWithThisEmail) {
       return res.status(400).json({ message: 'Email does not exists', token: null });
@@ -36,6 +35,12 @@ class AuthController {
 
     const token = createToken({ id: userWithThisEmail.id });
     return res.json({ message: 'User logged-in', token })
+  }
+
+  async auth(req: any, res: any) {
+    const { token, auth } = req;
+    const [user] = await AuthRepository.findById(token.id);
+    res.json({ message: 'Authenticated', auth, user });
   }
 };
 
