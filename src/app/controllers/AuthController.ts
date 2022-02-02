@@ -40,7 +40,13 @@ class AuthController {
   async auth(req: any, res: any) {
     const { token, auth } = req;
     const [user] = await AuthRepository.findById(token.id);
-    res.json({ message: 'Authenticated', auth, user });
+
+    const newUser = {
+      id: user.id,
+      profile_image: user.profile_image
+    }
+
+    res.json({ message: 'Authenticated', auth, user: newUser });
   }
 };
 
