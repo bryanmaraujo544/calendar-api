@@ -21,9 +21,12 @@ class TaskController {
       return res.status(400).json({ message: 'Already exists an event with this title in this date' });
     }
 
-    const taskCreated = await TasksRepository.create({ title, description, date, id });
-    console.log({ taskCreated });
-    res.json({ message: 'Task created' });
+
+    const [taskCreated] = await TasksRepository.create({ title, description, date, id });
+
+    // returning the task's infors to frontend because there will need the instant infos to fill the
+    // tasks state without be needed to reload the page;
+    res.json({ message: 'Task created', taskCreated });
   }
 
   async show(req: Request, res: any) {
@@ -36,6 +39,14 @@ class TaskController {
     } catch (err) {
       return res.status(400).json({ message: 'token invalid' })
     }
+  }
+
+  async delete(req: any, res: Response) {
+    const { id: userId } = req.token;
+    const { id: taskId } = req.params;
+
+    await TasksRepository.delete({ userId, taskId });
+    res.json({ message: 'Task deleted' });
   }
 }
 

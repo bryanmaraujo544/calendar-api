@@ -7,6 +7,11 @@ interface TaskProps {
   date: string
 }
 
+interface DeleteProps {
+  userId: string,
+  taskId: string
+}
+
 class TasksRepository {
   async findAll() {
     const sql = 'SELECT * FROM tasks';
@@ -53,6 +58,18 @@ class TasksRepository {
 
     const rows = await query(sql, [id]);
     return rows;
+  }
+
+  async delete({
+    userId,
+    taskId
+  }: DeleteProps) {
+    const sql = `
+      DELETE FROM tasks
+      WHERE id = $1 AND user_id = $2;
+    `;
+    await query(sql, [taskId, userId]);
+    return;
   }
 
 }

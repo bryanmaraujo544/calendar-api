@@ -18,6 +18,7 @@ router.get('/users', UserController.index);
 router.get('/tasks', auth, TaskController.index);
 router.get('/tasks/:token', TaskController.show);
 router.post('/tasks', auth, TaskController.store);
+router.delete('/tasks/:id', auth, TaskController.delete);
 
 
 export { router };
