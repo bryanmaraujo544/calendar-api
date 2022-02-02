@@ -48,6 +48,15 @@ class TaskController {
     await TasksRepository.delete({ userId, taskId });
     res.json({ message: 'Task deleted' });
   }
+
+  async update(req: any, res: Response) {
+    const { id: userId } = req.token;
+    const { id: taskId } = req.params;
+    const { title, description, date } = req.body;
+
+    const [taskUpdated] = await TasksRepository.update({ userId, taskId, title, description, date });
+    res.json({ taskUpdated });
+  }
 }
 
 export default new TaskController;

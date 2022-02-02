@@ -1,7 +1,7 @@
 import { query } from '../../database';
 
 interface TaskProps {
-  id: string,
+  id?: string,
   title: string,
   description?: string,
   date: string
@@ -10,6 +10,10 @@ interface TaskProps {
 interface DeleteProps {
   userId: string,
   taskId: string
+}
+
+interface UpdateProps extends DeleteProps, TaskProps {
+
 }
 
 class TasksRepository {
@@ -60,16 +64,30 @@ class TasksRepository {
     return rows;
   }
 
-  async delete({
-    userId,
-    taskId
-  }: DeleteProps) {
+  async delete({ userId, taskId }: DeleteProps) {
     const sql = `
       DELETE FROM tasks
       WHERE id = $1 AND user_id = $2;
     `;
     await query(sql, [taskId, userId]);
     return;
+  }
+
+  async update({
+    userId,
+    taskId,
+    title,
+    description,
+    date
+  }: UpdateProps) {
+    const sql = `
+      UPDATE tasks
+      SET title = $1, description = $2, date = $3
+      WHERE id = $4 AND user_id = $5
+      RETURNING *
+    `;
+    const taskUpdated = await query(sql, [title, description, date, taskId, userId]);
+    return taskUpdated;
   }
 
 }
