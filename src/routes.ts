@@ -14,6 +14,7 @@ router.post('/auth/register', AuthController.register);
 router.post('/auth/login', AuthController.login);
 
 router.get('/users', UserController.index);
+router.put('/users', auth, UserController.update);
 
 router.get('/tasks', auth, TaskController.index);
 router.get('/tasks/:token', TaskController.show);
