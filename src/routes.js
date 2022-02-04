@@ -13,7 +13,7 @@ router.get('/auth', auth, AuthController.auth);
 router.post('/auth/register', AuthController.register);
 router.post('/auth/login', AuthController.login);
 
-router.get('/users', UserController.index);
+// router.get('/users', UserController.index);
 router.put('/users', auth, UserController.update);
 
 router.get('/tasks', auth, TaskController.index);
