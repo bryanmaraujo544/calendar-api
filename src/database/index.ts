@@ -1,10 +1,12 @@
 import mysql from 'mysql';
 
+// mysql://b176e1cefdafa9:6b8c5581@us-cdbr-east-05.cleardb.net/heroku_f95bd7e162a7bad?reconnect=true
+
 const db = mysql.createPool({
-    host: 'localhost',
-    user: 'root',
-    password: 'root',
-    database: 'calendar'
+    host: 'us-cdbr-east-05.cleardb.net',
+    user: 'b176e1cefdafa9',
+    password: '6b8c5581',
+    database: 'heroku_f95bd7e162a7bad'
 });
 
 export const query = async (query: string, values = [] as any) => {
@@ -18,10 +20,9 @@ export const query = async (query: string, values = [] as any) => {
             }
         });
     });
-    console.log({ result });
     return result;
   } catch (err) {
-      console.log('This err happend on db query', err);
+      console.log('This err happened on db query', err);
   }
 };
 

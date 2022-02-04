@@ -56,7 +56,6 @@ class TasksRepository {
       WHERE user_id = ? AND title = ?
     `;
     const taskCreated = await query(sql1, [userId, title]);
-    console.log({ taskCreated });
     return taskCreated;
   }
 
@@ -100,7 +99,6 @@ class TasksRepository {
       WHERE id = ?
     `;
     const taskUpdated = await query(sql1, [taskId]);
-    console.log({ taskUpdated });
     return taskUpdated;
   }
 

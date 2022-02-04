@@ -1,3 +1,5 @@
+-- if you want to run this database on your machine, copy the entire queries below and run!
+
 CREATE DATABASE calendar;
 
 USE calendar;
