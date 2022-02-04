@@ -9,12 +9,12 @@ interface UserInfos {
 
 class AuthRepository {
   async findByEmail(email: string) {
-    const rows = await query("SELECT * FROM users WHERE email = $1", [email]);
+    const rows = await query("SELECT * FROM users WHERE email = ?", [email]);
     return rows;
   }
 
   async findById(id: string) {
-    const rows = await query('SELECT * FROM users WHERE id = $1', [id]);
+    const rows = await query('SELECT * FROM users WHERE id = ?', [id]);
     return rows;
   }
 
@@ -26,7 +26,7 @@ class AuthRepository {
     const hashedPassword = await bcrypt.hash(password, 10);
     const sql = `
       INSERT INTO users
-      VALUES (default, $1, $2, $3)
+      VALUES (default, ?, ?, ?)
     `;
 
     const result = await query(sql, [email, hashedPassword, photoUrl]);

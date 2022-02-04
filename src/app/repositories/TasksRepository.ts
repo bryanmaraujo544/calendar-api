@@ -31,33 +31,40 @@ class TasksRepository {
     const sql = `
       SELECT *
       FROM tasks
-      WHERE user_id = $1 AND title = $2 AND date = $3;
+      WHERE user_id = ? AND title = ? AND date = ?;
     `;
     const rows = await query(sql, [id, title, date]);
     return rows;
   }
 
   async create({
-    id,
+    id: userId,
     title,
     description,
     date
   }: TaskProps) {
     const sql = `
       INSERT INTO tasks
-      VALUES (default, $1, $2, $3, $4)
-      RETURNING *
-    `;
+      VALUES (default, ?, ?, ?, ?)
 
-    const rows = await query(sql, [title, description, date, id]);
-    return rows;
+    `;
+    await query(sql, [title, description, date, userId]);
+
+    const sql1 = `
+      SELECT *
+      FROM tasks
+      WHERE user_id = ? AND title = ?
+    `;
+    const taskCreated = await query(sql1, [userId, title]);
+    console.log({ taskCreated });
+    return taskCreated;
   }
 
   async findById({ id }: { id: string }) {
     const sql = `
       SELECT *
       FROM tasks
-      WHERE user_id = $1
+      WHERE user_id = ?
     `;
 
     const rows = await query(sql, [id]);
@@ -67,7 +74,7 @@ class TasksRepository {
   async delete({ userId, taskId }: DeleteProps) {
     const sql = `
       DELETE FROM tasks
-      WHERE id = $1 AND user_id = $2;
+      WHERE id = ? AND user_id = ?;
     `;
     await query(sql, [taskId, userId]);
     return;
@@ -82,11 +89,18 @@ class TasksRepository {
   }: UpdateProps) {
     const sql = `
       UPDATE tasks
-      SET title = $1, description = $2, date = $3
-      WHERE id = $4 AND user_id = $5
-      RETURNING *
+      SET title = ?, description = ?, date = ?
+      WHERE id = ? AND user_id = ?
     `;
-    const taskUpdated = await query(sql, [title, description, date, taskId, userId]);
+    await query(sql, [title, description, date, taskId, userId]);
+
+    const sql1 = `
+      SELECT *
+      FROM tasks
+      WHERE id = ?
+    `;
+    const taskUpdated = await query(sql1, [taskId]);
+    console.log({ taskUpdated });
     return taskUpdated;
   }
 

@@ -1,18 +1,29 @@
-import { Client } from 'pg';
+import mysql from 'mysql';
 
-const client = new Client({
-  host: 'localhost',
-  port: 5432,
-  user: 'root',
-  password: 'root',
-  database: 'calendar',
+const db = mysql.createPool({
+    host: 'localhost',
+    user: 'root',
+    password: 'root',
+    database: 'calendar'
 });
 
-client.connect();
+export const query = async (query: string, values = [] as any) => {
+  try {
+    const result = await new Promise((resolve, reject) => {
+        db.query(query, values, (err: any, res: any) => {
+            if (err) {
+                reject(err);
+            } else {
+                resolve(res);
+            }
+        });
+    });
+    console.log({ result });
+    return result;
+  } catch (err) {
+      console.log('This err happend on db query', err);
+  }
+};
 
-export const query: any = async (query: any, values = [] as any) => {
-  const { rows } = await client.query(query, values);
-  return rows;
-}
 
 

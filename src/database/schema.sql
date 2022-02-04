@@ -1,19 +1,20 @@
 CREATE DATABASE calendar;
 
-CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+USE calendar;
 
 CREATE TABLE IF NOT EXISTS users (
-  id UUID NOT NULL UNIQUE DEFAULT uuid_generate_v4(),
-  email VARCHAR NOT NULL,
-  password VARCHAR NOT NULL,
-  profile_image VARCHAR NOT NULL
+  id INT AUTO_INCREMENT PRIMARY KEY NOT NULL,
+  email VARCHAR(256) NOT NULL,
+  password VARCHAR(512) NOT NULL,
+  profile_image VARCHAR(512) NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS tasks (
-  id UUID NOT NULL UNIQUE DEFAULT uuid_generate_v4(),
-  title VARCHAR NOT NULL,
-  description VARCHAR,
-  date VARCHAR NOT NULL,
-  user_id UUID,
+  id INT AUTO_INCREMENT PRIMARY KEY NOT NULL,
+  title VARCHAR(256) NOT NULL,
+  description VARCHAR(128),
+  date VARCHAR(128) NOT NULL,
+  user_id INT,
   FOREIGN KEY(user_id) REFERENCES users(id)
 );
+

@@ -10,13 +10,19 @@ class UsersRepository {
   async update({ photoUrl, userId }: { photoUrl: string, userId: string }) {
     const sql = `
       UPDATE users
-      SET profile_image = $1
-      WHERE id = $2
-      RETURNING *
+      SET profile_image = ?
+      WHERE id = ?
     `;
+    await query(sql, [photoUrl, userId]);
 
-    const rows = await query(sql, [photoUrl, userId]);
-    return rows;
+    const sql1 = `
+      SELECT *
+      FROM users
+      WHERE id = ?
+    `;
+    const userUpdated = await query(sql1, [userId]);
+
+    return userUpdated;
   }
 }
 
